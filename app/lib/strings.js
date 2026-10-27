@@ -1,0 +1,13 @@
+// All UI copy lives here.
+export const s = {
+  appName: 'বাংলা নাত', home: 'হোম', new: 'নতুন', popular: 'জনপ্রিয়', favorites: 'পছন্দের', contact: 'যোগাযোগ',
+  search: 'খুঁজুন', searchPlaceholder: 'নাত খুঁজুন', byTitle: 'নাম দিয়ে', byText: 'লেখা দিয়ে',
+  searchHint: 'কমপক্ষে ২টি অক্ষর লিখুন', categories: 'বিভাগ', emptyNaats: 'কোনো নাত পাওয়া যায়নি',
+  login: 'লগইন', register: 'নিবন্ধন করুন', forgot: 'পাসওয়ার্ড ভুলে গেছেন?', name: 'নাম', email: 'ইমেইল', password: 'পাসওয়ার্ড',
+  sendLink: 'রিসেট লিংক পাঠান', noAccount: 'অ্যাকাউন্ট নেই? নিবন্ধন করুন', haveAccount: 'অ্যাকাউন্ট আছে? লগইন করুন',
+  youtube: 'ইউটিউবে দেখুন', share: 'শেয়ার', contactIntro: 'কোনো প্রশ্ন বা পরামর্শ থাকলে সরাসরি কল করুন।',
+  admin: 'অ্যাডমিন প্যানেল', users: 'ব্যবহারকারী', logout: 'লগআউট', createNaat: 'নতুন নাত', editNaat: 'নাত সম্পাদনা',
+  title: 'শিরোনাম', content: 'নাতের লেখা', author: 'শিল্পী / লেখক', youtubeLink: 'ইউটিউব লিংক (ঐচ্ছিক)', category: 'বিভাগ',
+  save: 'সংরক্ষণ করুন', edit: 'সম্পাদনা', delete: 'মুছুন', ban: 'নিষিদ্ধ করুন', unban: 'নিষেধাজ্ঞা তুলুন',
+  banned: 'নিষিদ্ধ', unverified: 'যাচাই হয়নি', prev: 'আগের', next: 'পরের',
+};

@@ -1,20 +1,103 @@
+import { Ionicons } from '@expo/vector-icons';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable } from 'react-native';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-export default function App() {
+import { s } from './lib/strings';
+import { colors } from './lib/theme';
+
+import CategoryScreen from './screens/CategoryScreen';
+import ContactScreen from './screens/ContactScreen';
+import FavoritesScreen from './screens/FavoritesScreen';
+import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
+import HomeScreen from './screens/HomeScreen';
+import LoginScreen from './screens/LoginScreen';
+import NaatDetailScreen from './screens/NaatDetailScreen';
+import NewNaatsScreen from './screens/NewNaatsScreen';
+import PopularScreen from './screens/PopularScreen';
+import RegisterScreen from './screens/RegisterScreen';
+import SearchScreen from './screens/SearchScreen';
+import AdminNaatFormScreen from './screens/admin/AdminNaatFormScreen';
+import AdminNaatsScreen from './screens/admin/AdminNaatsScreen';
+import AdminUsersScreen from './screens/admin/AdminUsersScreen';
+
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator();
+
+const navTheme = { ...DefaultTheme, colors: { ...DefaultTheme.colors, background: colors.bg, primary: colors.emerald, card: colors.bg, text: colors.ink } };
+const headerStyle = {
+  headerStyle: { backgroundColor: colors.bg },
+  headerShadowVisible: false,
+  headerTintColor: colors.emerald,
+  headerTitleStyle: { color: colors.ink, fontWeight: '700' },
+};
+
+const TAB_ICONS = {
+  Home: ['home', 'home-outline'],
+  New: ['sparkles', 'sparkles-outline'],
+  Popular: ['flame', 'flame-outline'],
+  Favorites: ['bookmark', 'bookmark-outline'],
+  Contact: ['call', 'call-outline'],
+};
+
+function Tabs() {
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <Tab.Navigator
+      screenOptions={({ route }) => ({
+        ...headerStyle,
+        lazy: true,
+        headerShown: route.name !== 'Home',
+        tabBarActiveTintColor: colors.emerald,
+        tabBarInactiveTintColor: colors.muted,
+        tabBarStyle: { backgroundColor: colors.surface, borderTopColor: colors.line },
+        tabBarIcon: ({ focused, color, size }) => (
+          <Ionicons name={TAB_ICONS[route.name][focused ? 0 : 1]} size={size} color={color} />
+        ),
+      })}
+    >
+      <Tab.Screen name="Home" component={HomeScreen} options={{ title: s.home }} />
+      <Tab.Screen name="New" component={NewNaatsScreen} options={{ title: s.new }} />
+      <Tab.Screen name="Popular" component={PopularScreen} options={{ title: s.popular }} />
+      <Tab.Screen name="Favorites" component={FavoritesScreen} options={{ title: s.favorites }} />
+      <Tab.Screen name="Contact" component={ContactScreen} options={{ title: s.contact }} />
+    </Tab.Navigator>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+// Logout button shown in every admin header.
+const adminOptions = ({ navigation }) => ({
+  headerRight: () => (
+    <Pressable hitSlop={8} accessibilityLabel={s.logout} onPress={() => navigation.popToTop()}>
+      <Ionicons name="log-out-outline" size={24} color={colors.emerald} />
+    </Pressable>
+  ),
 });
+
+export default function App() {
+  return (
+    <SafeAreaProvider>
+      <StatusBar style="dark" />
+      <NavigationContainer theme={navTheme}>
+        <Stack.Navigator screenOptions={headerStyle}>
+          <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
+          <Stack.Screen name="Search" component={SearchScreen} options={{ title: s.search }} />
+          <Stack.Screen name="Category" component={CategoryScreen} options={({ route }) => ({ title: route.params.label })} />
+          <Stack.Screen name="NaatDetail" component={NaatDetailScreen} options={{ title: '' }} />
+          <Stack.Screen name="Login" component={LoginScreen} options={{ title: s.login }} />
+          <Stack.Screen name="Register" component={RegisterScreen} options={{ title: s.register }} />
+          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ title: s.forgot }} />
+          <Stack.Screen name="AdminNaats" component={AdminNaatsScreen} options={(p) => ({ ...adminOptions(p), title: s.admin })} />
+          <Stack.Screen name="AdminUsers" component={AdminUsersScreen} options={(p) => ({ ...adminOptions(p), title: s.users })} />
+          <Stack.Screen
+            name="AdminNaatForm"
+            component={AdminNaatFormScreen}
+            options={(p) => ({ ...adminOptions(p), title: p.route.params?.id ? s.editNaat : s.createNaat })}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+    </SafeAreaProvider>
+  );
+}
