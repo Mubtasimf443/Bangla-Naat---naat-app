@@ -15,14 +15,7 @@ export default function HomeScreen({ navigation }) {
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ScrollView contentContainerStyle={{ padding: space.lg }}>
-        <View style={styles.top}>
-          <Text style={type.display}>{s.appName}</Text>
-          <View style={{ flexDirection: 'row', gap: space.sm }}>
-            {/* TODO: show only for admin / moderator */}
-            <IconButton name="shield-checkmark-outline" onPress={() => navigation.navigate('AdminNaats')} />
-            <IconButton name="person-outline" onPress={() => navigation.navigate('Login')} />
-          </View>
-        </View>
+        
 
         <Pressable onPress={() => navigation.navigate('Search')} style={styles.search}>
           <Ionicons name="search" size={20} color={colors.muted} />

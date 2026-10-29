@@ -14,11 +14,11 @@ const registerSchema = z.object({
     .string()
     .trim()
     .min(4, 'নাম কমপক্ষে 4 অক্ষরের হতে হবে')
-    .max(50, 'নাম সর্বোচ্চ 50 অক্ষরের হতে পারবে'),
+    .max(80, 'নাম সর্বোচ্চ 50 অক্ষরের হতে পারবে'),
   email: z
     .string()
     .trim()
-    .min(1, 'ইমেইল লিখুন')
+    .min(6, 'ইমেইল লিখুন')
     .max(254, 'ইমেইল সর্বোচ্চ 254 অক্ষরের হতে পারবে')
     .email('সঠিক ইমেইল ঠিকানা দিন'),
   password: z
@@ -48,13 +48,13 @@ export default function RegisterScreen({ navigation }) {
 
     setLoading(true);
     try {
-      let response = await fetch(process.env.EXPO_PUBLIC_API_URL + '/api/auth/registration', { 
+      let response = await fetch(process.env.EXPO_PUBLIC_API_URL + '/api/auth/registration', {
         method: 'POST',
-        headers : {
+        headers: {
           'content-type': 'application/json'
         },
-        body : JSON.stringify({
-          name, 
+        body: JSON.stringify({
+          name,
           email,
           password
         })
@@ -64,11 +64,11 @@ export default function RegisterScreen({ navigation }) {
         setTimeout(() => {
           navigation.navigate('Login')
         }, 3000);
-      } 
-      if (response.status ===503) {
+      }
+      else if (response.status === 503) {
         setError('কিছু কারণে আপনার মোবাইলে ইমেইল পাঠানো যাচ্ছে না')
       }
-      else if (response.status ===200 || response.status === 201) {
+      else if (response.status === 200 || response.status === 201) {
         setSuccess(
           'আপনার ইমেইলে একটি ভেরিফিকেশন লিংক পাঠানো হয়েছে, অনুগ্রহ করে লিংকটি অনুসরণ করুন।'
         );
@@ -117,7 +117,7 @@ export default function RegisterScreen({ navigation }) {
         </Text>
       ) : null}
 
-      <Button title={s.register} onPress={formSubmit} disabled={loading || !!success} />
+      <Button title={s.register} onPress={formSubmit} disabled={loading || !!success} loading={loading} />
       <Text
         style={[type.body, { color: colors.emerald, textAlign: 'center', marginTop: space.xl }]}
         onPress={() => navigation.replace('Login')}

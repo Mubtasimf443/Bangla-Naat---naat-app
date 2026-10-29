@@ -3,6 +3,7 @@ import {
   ConflictException,
   ForbiddenException,
   Injectable,
+  NotFoundException,
   ServiceUnavailableException,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -64,7 +65,7 @@ export class AuthService {
     if (!user) {
       return [user, ''];
     }
-    let accessToken=await this.jwt.signAsync({ sub: user?._id, role : user?.role })
+    let accessToken = await this.jwt.signAsync({ sub: user?._id, role: user?.role })
     return [user, accessToken];
   }
 
@@ -88,8 +89,11 @@ export class AuthService {
   async forgotPassword(dto: ForgotPasswordDto) {
     const user = await this.users.findByEmail(dto.email);
     // Same response whether or not the account exists (prevents email enumeration).
-    if (!user || !user.isVerified || user.isBanned) return { message: GENERIC_FORGOT_MESSAGE };
-
+    
+    if (!user) throw new NotFoundException('No account found with this email');
+    if (!user.isVerified) throw new ForbiddenException('Please verify your email before resetting your password');
+    if (user.isBanned) throw new ForbiddenException('Your account has been banned');
+    
     const { token, hash } = this.generateToken();
     const pendingPasswordHash = await bcrypt.hash(dto.newPassword, 12);
     await this.users.setPasswordReset(

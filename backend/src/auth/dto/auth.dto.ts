@@ -11,6 +11,8 @@ export class RegisterDto {
 
   @ApiProperty({ example: 'abdullah@example.com' })
   @IsEmail()
+  @MinLength(6)
+  @MaxLength(255)
   email: string;
 
   @ApiProperty({ example: 'StrongPass123', minLength: 8 })
@@ -23,22 +25,30 @@ export class RegisterDto {
 export class LoginDto {
   @ApiProperty({ example: 'abdullah@example.com' })
   @IsEmail()
+  @IsNotEmpty()
+  @MinLength(6)
+  @MaxLength(255)
   email: string;
 
   @ApiProperty({ example: 'StrongPass123' })
   @IsString()
   @IsNotEmpty()
+  @MaxLength(64)
+  @MinLength(8)
   password: string;
 }
 
 export class ForgotPasswordDto {
   @ApiProperty({ example: 'abdullah@example.com' })
   @IsEmail()
+  @MinLength(6)
+  @MaxLength(255)
   email: string;
 
   @ApiProperty({
     example: 'MyNewPass456',
     minLength: 8,
+    maxLength : 64,
     description: 'Applied only after the user clicks the link sent to their email',
   })
   @IsString()

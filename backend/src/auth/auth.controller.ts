@@ -32,14 +32,9 @@ export class AuthController {
   login(@Body() dto: LoginDto) {
     return this.auth.login(dto);
   }
-}
 
-@ApiTags('Auth')
-@Controller('forgot-password')
-export class ForgotPasswordController {
-  constructor(private readonly auth: AuthService) {}
-
-  @Post()
+  
+  @Post('forgot-password')
   @HttpCode(200)
   @ApiOperation({
     summary: 'Request a password change: send email + new password, then confirm via emailed link',
@@ -48,7 +43,7 @@ export class ForgotPasswordController {
     return this.auth.forgotPassword(dto);
   }
 
-  @Get('callback/:token')
+  @Get('forgot-password/callback/:token')
   @ApiOperation({ summary: 'Confirm the new password (opened from the link in the email)' })
   @ApiProduces('text/html')
   async callback(@Param('token') token: string, @Res() res: Response) {
@@ -63,3 +58,5 @@ export class ForgotPasswordController {
       );
   }
 }
+
+
