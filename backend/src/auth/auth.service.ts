@@ -113,7 +113,7 @@ export class AuthService {
       throw new ServiceUnavailableException('Could not send the email. Please try again later.');
     }
 
-    return { message: GENERIC_FORGOT_MESSAGE };
+    return { success : true, data : null };
   }
 
   async applyPasswordReset(token: string): Promise<boolean> {
