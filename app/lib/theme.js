@@ -2,11 +2,11 @@
 
 export const colors = {
   ink: '#12211F', 
-  emerald: '#0E4D45', 
+  emerald: '#064d0b', 
   emeraldSoft: '#E1EEEA', 
   bg: '#F6F8F5', 
   surface: '#FFFFFF',
-  brass: '#B58A3C', 
+  brass: '#23b110', 
   muted: '#667772', 
   line: '#DCE5E1', 
   danger: '#B3372C', 

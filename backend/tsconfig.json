@@ -1,0 +1,26 @@
+// بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ صلى الله عليه وسلم InshaAllah
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "moduleResolution": "node10",
+    "target": "ES2022",
+    "rootDir": "./src",
+    "outDir": "./dist",
+    "removeComments": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "incremental": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": false,
+    "noImplicitAny": false,
+    "ignoreDeprecations": "6.0",
+    "types": ["node"],
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": ["src/**/*"]
+}

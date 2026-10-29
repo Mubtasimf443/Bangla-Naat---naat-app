@@ -55,7 +55,13 @@ const styles = StyleSheet.create({
   },
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
   tile: {
-    width: '48%', minHeight: 84, backgroundColor: colors.surface, borderRadius: radius.md,
-    borderLeftWidth: 4, borderLeftColor: colors.brass, padding: space.lg, justifyContent: 'center',
+    width: '48%',
+    minHeight: 84, 
+    backgroundColor: colors.surface, 
+    borderRadius: radius.md,
+    borderLeftWidth: 4,
+    borderLeftColor: colors.brass, 
+    padding: space.lg, 
+    justifyContent: 'center',
   },
 });

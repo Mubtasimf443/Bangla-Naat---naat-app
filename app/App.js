@@ -1,15 +1,17 @@
+/* بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ ﷺ InshaAllah */
+
+import * as Linking from 'expo-linking';
 import { Ionicons } from '@expo/vector-icons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
-import { Pressable } from 'react-native';
+import { Pressable, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { s } from './lib/strings';
 import { colors } from './lib/theme';
 
-import CategoryScreen from './screens/CategoryScreen';
 import ContactScreen from './screens/ContactScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
 import ForgotPasswordScreen from './screens/ForgotPasswordScreen';
@@ -20,9 +22,12 @@ import NewNaatsScreen from './screens/NewNaatsScreen';
 import PopularScreen from './screens/PopularScreen';
 import RegisterScreen from './screens/RegisterScreen';
 import SearchScreen from './screens/SearchScreen';
-import AdminNaatFormScreen from './screens/admin/AdminNaatFormScreen';
-import AdminNaatsScreen from './screens/admin/AdminNaatsScreen';
-import AdminUsersScreen from './screens/admin/AdminUsersScreen';
+
+import RegistrationSuccessScreen from './screens/RegistrationSuccessScreen';
+import { tokenService } from './lib/tokenService';
+import { useTokenStore } from './lib/token.store';
+import { useEffect, useState } from 'react';
+import NaatLoadingScreen from './components/NaatLoadingScreen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -76,26 +81,58 @@ const adminOptions = ({ navigation }) => ({
   ),
 });
 
+const linking = {
+  prefixes: [Linking.createURL('/'), 'banglanaat://'],
+  config: {
+    screens: {
+      RegistrationSuccess: 'registration-success',
+    },
+  },
+};
+
 export default function App() {
+  const [loading, setLoading] = useState(true);
+  const isLoggedOut = useTokenStore(state => state.isLoggedOut);
+  const Loggout = useTokenStore(state => state.Loggout);
+  const Login = useTokenStore(state => state.Login);
+
+  useEffect(() => {
+    setTimeout(() => {
+      let token = tokenService.getBearerToken();
+      if (!token) Loggout();
+      else Login(token);
+      setLoading(false);
+    }, 3000);
+  }, []);
+
+  if (loading) return <NaatLoadingScreen />;
+  
+
   return (
     <SafeAreaProvider>
       <StatusBar style="dark" />
-      <NavigationContainer theme={navTheme}>
-        <Stack.Navigator screenOptions={headerStyle}>
-          <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
-          <Stack.Screen name="Search" component={SearchScreen} options={{ title: s.search }} />
-          <Stack.Screen name="Category" component={CategoryScreen} options={({ route }) => ({ title: route.params.label })} />
-          <Stack.Screen name="NaatDetail" component={NaatDetailScreen} options={{ title: '' }} />
-          <Stack.Screen name="Login" component={LoginScreen} options={{ title: s.login }} />
-          <Stack.Screen name="Register" component={RegisterScreen} options={{ title: s.register }} />
-          <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ title: s.forgot }} />
-          <Stack.Screen name="AdminNaats" component={AdminNaatsScreen} options={(p) => ({ ...adminOptions(p), title: s.admin })} />
-          <Stack.Screen name="AdminUsers" component={AdminUsersScreen} options={(p) => ({ ...adminOptions(p), title: s.users })} />
-          <Stack.Screen
-            name="AdminNaatForm"
-            component={AdminNaatFormScreen}
-            options={(p) => ({ ...adminOptions(p), title: p.route.params?.id ? s.editNaat : s.createNaat })}
-          />
+      <NavigationContainer theme={navTheme} linking={linking}>
+        <Stack.Navigator screenOptions={headerStyle}  >
+          {
+            isLoggedOut ?
+              (
+                <>
+                  <Stack.Screen name="Register" component={RegisterScreen} options={{ title: s.register }} />
+                  <Stack.Screen name="Login" component={LoginScreen} options={{ title: s.login }} />
+                  <Stack.Screen name="ForgotPassword" component={ForgotPasswordScreen} options={{ title: s.forgot }} />
+                  <Stack.Screen name='RegistrationSuccess' component={RegistrationSuccessScreen} options={{ title: 'Registration SuccessFul' }} />
+                </>
+              )
+              :
+              (
+                <>
+                  <Stack.Screen name="Tabs" component={Tabs} options={{ headerShown: false }} />
+                  <Stack.Screen name="Search" component={SearchScreen} options={{ title: s.search }} />
+                  <Stack.Screen name="NaatDetail" component={NaatDetailScreen} options={{ title: '' }} />
+                </>
+              )
+          }
+
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>

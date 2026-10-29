@@ -7,10 +7,8 @@ export const CONTACTS = [
 export const CATEGORIES = [
   { id: 'hamd', label: 'হামদ' },
   { id: 'naat', label: 'নাত' },
-  { id: 'milad', label: 'মিলাদ' },
-  { id: 'ghazal', label: 'ইসলামী গজল' },
+  { id: 'ghazal', label: 'ইসলামীক গান' },
   { id: 'qasida', label: 'কাসিদা' },
-  { id: 'madina', label: 'মদীনার গান' },
 ];
 
 export const categoryLabel = (id) => CATEGORIES.find((c) => c.id === id)?.label ?? id;
