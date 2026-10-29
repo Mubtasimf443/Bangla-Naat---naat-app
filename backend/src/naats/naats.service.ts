@@ -18,27 +18,15 @@ export class NaatsService {
     private readonly gateway: NaatsGateway,
   ) {}
 
-  // ---------------- reads ----------------
-  findAll(query: QueryNaatsDto) {
-    const filter: Record<string, any> = {};
-    if (query.category) filter.category = query.category;
-
-    if (query.search?.trim()) {
-      const rx = new RegExp(escapeRegex(query.search.trim()), 'i');
-      filter.$or =
-        query.searchBy === 'title'
-          ? [{ title: rx }]
-          : query.searchBy === 'content'
-            ? [{ content: rx }]
-            : [{ title: rx }, { content: rx }];
-    }
-    return this.paginate(filter, query.sort === 'popular' ? MOST_LIKED : NEWEST, query);
-  }
+ 
 
   /** Every naat in the database, for the first app launch. */
-  findInitial(updatedAfter?: string) {
-    const filter = updatedAfter ? { updatedAt: { $gt: new Date(updatedAfter) } } : {};
-    return this.naatModel.find(filter).sort(NEWEST).lean().exec();
+  async findInitial() {
+    return await this.naatModel.find({})
+      .select('title content category author youtubeUrl likes createdAt updatedAtna')
+      .sort(NEWEST)
+      .lean()
+      .exec();
   }
 
   findPopular(query: PaginationDto) {
@@ -47,14 +35,6 @@ export class NaatsService {
 
   async findFavorites(userId: string, query: PaginationDto) {
     return this.paginate({ likedBy: userId }, NEWEST, query);
-  }
-
-  async categories() {
-    return this.naatModel.aggregate([
-      { $group: { _id: '$category', count: { $sum: 1 } } },
-      { $project: { _id: 0, name: '$_id', count: 1 } },
-      { $sort: { name: 1 } },
-    ]);
   }
 
   async findOne(id: string) {

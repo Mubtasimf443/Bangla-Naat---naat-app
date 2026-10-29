@@ -29,18 +29,10 @@ import { NaatsService } from './naats.service';
 export class NaatsController {
   constructor(private readonly naats: NaatsService) {}
 
-  @Get()
-  @ApiOperation({
-    summary: 'List naats (pagination, search by title/text, category filter, sort new/popular)',
-  })
-  findAll(@Query() query: QueryNaatsDto) {
-    return this.naats.findAll(query);
-  }
-
   @Get('initial')
   @ApiOperation({ summary: 'Download every naat in the database (first app launch)' })
-  initial(@Query() query: InitialNaatsQueryDto) {
-    return this.naats.findInitial(query.updatedAfter);
+  async initial() {
+    return await this.naats.findInitial();
   }
 
   @Get('popular')
@@ -49,11 +41,6 @@ export class NaatsController {
     return this.naats.findPopular(query);
   }
 
-  @Get('categories')
-  @ApiOperation({ summary: 'List of naat categories with counts (home screen)' })
-  categories() {
-    return this.naats.categories();
-  }
 
   @Get('fevorites')
   @ApiBearerAuth()

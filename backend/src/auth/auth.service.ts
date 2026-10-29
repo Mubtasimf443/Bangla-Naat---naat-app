@@ -22,7 +22,6 @@ const GENERIC_FORGOT_MESSAGE =
 
 @Injectable()
 export class AuthService {
-
   constructor(
     private readonly users: UsersService,
     private readonly jwt: JwtService,
