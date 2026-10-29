@@ -11,7 +11,7 @@ import { QueryUsersDto } from './dto/query-users.dto';
 import { User, UserDocument } from './schemas/user.schema';
 
 @Injectable()
-export class UsersService implements OnModuleInit {
+export class UsersService {
   private readonly logger = new Logger(UsersService.name);
 
   constructor(
@@ -19,24 +19,6 @@ export class UsersService implements OnModuleInit {
     private readonly config: ConfigService,
   ) {}
 
-  /** Creates the first admin from ADMIN_EMAIL / ADMIN_PASSWORD if it does not exist yet. */
-  async onModuleInit() {
-    const email = this.config.get<string>('ADMIN_EMAIL')?.toLowerCase();
-    const password = this.config.get<string>('ADMIN_PASSWORD');
-    if (!email || !password) return;
-
-    const exists = await this.userModel.exists({ email });
-    if (exists) return;
-
-    await this.userModel.create({
-      name: this.config.get<string>('ADMIN_NAME', 'Admin'),
-      email,
-      password: await bcrypt.hash(password, 12),
-      role: Role.ADMIN,
-      isVerified: true,
-    });
-    this.logger.log(`Seeded admin account: ${email}`);
-  }
 
   create(data: { name: string; email: string; password: string }) {
     return this.userModel.create(data);

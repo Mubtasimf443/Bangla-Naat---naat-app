@@ -107,7 +107,7 @@ export class AuthService {
       await this.mail.sendPasswordResetEmail(
         user.email,
         user.name,
-        `${this.baseUrl()}/api/forgot-password/callback/${token}`,
+        `${this.baseUrl()}/api/auth/forgot-password/callback/${token}`,
       );
     } catch (err) {
       throw new ServiceUnavailableException('Could not send the email. Please try again later.');
