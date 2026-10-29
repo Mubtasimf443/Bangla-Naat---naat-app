@@ -1,8 +1,8 @@
 {
   "expo": {
-    "scheme" : "banglanaat",
-    "name": "app",
-    "slug": "app",
+    "scheme": "banglanaat",
+    "name": "Bangla Naat",
+    "slug": "bangla_naat",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/smallLogo.png",
@@ -28,7 +28,8 @@
       }
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-sqlite"
     ]
   }
 }

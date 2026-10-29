@@ -8,7 +8,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { Pressable, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
+import * as SecureStore from 'expo-secure-store'
 import { s } from './lib/strings';
 import { colors } from './lib/theme';
 
@@ -28,6 +28,8 @@ import { tokenService } from './lib/tokenService';
 import { useTokenStore } from './lib/token.store';
 import { useEffect, useState } from 'react';
 import NaatLoadingScreen from './components/NaatLoadingScreen';
+import InitializingScreen from './components/InitializingScreen';
+import { insertAllNaats } from './services/database.service';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -92,11 +94,33 @@ const linking = {
 
 export default function App() {
   const [loading, setLoading] = useState(true);
+  const [isInitializing , setIsInitializing] = useState(false);
   const isLoggedOut = useTokenStore(state => state.isLoggedOut);
   const Loggout = useTokenStore(state => state.Loggout);
   const Login = useTokenStore(state => state.Login);
+  const isInitialized = SecureStore.getItem('INITIALIZATION');
 
+  async function initializeNaat(params) {
+    try {
+      setIsInitializing(true);
+
+      let response = await fetch(process.env.EXPO_PUBLIC_API_URL + '/api/naats/initial');
+      if (response.status > 201) {
+        throw new Error("Failed in initial naats");
+      }
+      let naats = await response.json();
+      await insertAllNaats(naats);
+      SecureStore.setItem('INITIALIZATION', 'yes')
+    } catch (error) {
+      console.error(error);
+      SecureStore.setItem('INITIALIZATION', 'no')
+    } finally {
+      setIsInitializing(false);
+    }
+  }
+  
   useEffect(() => {
+    if (isInitialized !== 'yes') initializeNaat();
     setTimeout(() => {
       let token = tokenService.getBearerToken();
       if (!token) Loggout();
@@ -105,6 +129,7 @@ export default function App() {
     }, 3000);
   }, []);
 
+  if (isInitializing) return <InitializingScreen />
   if (loading) return <NaatLoadingScreen />;
   
 

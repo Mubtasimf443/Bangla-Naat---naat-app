@@ -2,7 +2,6 @@
 
 import {
     Pressable,
-    SafeAreaView,
     StatusBar,
     StyleSheet,
     Text,
@@ -12,6 +11,7 @@ import { colors } from '../lib/theme'; // adjust path to your theme file
 import { useEffect } from 'react';
 import { TOKEN_KEYS, tokenService } from '../lib/tokenService';
 import { useTokenStore } from '../lib/token.store';
+import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function RegistrationSuccessScreen({ route, navigation }) {
     const status = route.params?.status ?? 'success';
@@ -20,11 +20,12 @@ export default function RegistrationSuccessScreen({ route, navigation }) {
     let Login = useTokenStore(state => state.Login);
 
     useEffect(() => {
+        tokenService.setBearerToken(token);
         setTimeout(() => {
-            if (!!token && isSuccess) Login(token);
+            if (isSuccess) Login(token);
         }, 3000);
     }, []);
-    
+
     const goToLogin = () => navigation.replace('Login');
     const goToRegister = () => navigation.replace('Register');
 
@@ -54,20 +55,24 @@ export default function RegistrationSuccessScreen({ route, navigation }) {
                 </Text>
             </View>
 
-            <View style={styles.footer}>
-                <Pressable
-                    onPress={isSuccess ? goToLogin : goToRegister}
-                    accessibilityRole="button"
-                    style={({ pressed }) => [
-                        styles.button,
-                        pressed && styles.buttonPressed,
-                    ]}
-                >
-                    <Text style={styles.buttonText}>
-                        {isSuccess ? 'Log in' : 'Register again'}
-                    </Text>
-                </Pressable>
-            </View>
+            {
+                isSuccess && (
+                    <View style={styles.footer}>
+                        <Pressable
+                            onPress={ goToRegister}
+                            accessibilityRole="button"
+                            style={({ pressed }) => [
+                                styles.button,
+                                pressed && styles.buttonPressed,
+                            ]}
+                        >
+                            <Text style={styles.buttonText}>
+                                Register again
+                            </Text>
+                        </Pressable>
+                    </View>
+                )
+            }
         </SafeAreaView>
     );
 }
