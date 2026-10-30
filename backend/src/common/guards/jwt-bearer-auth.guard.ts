@@ -1,4 +1,5 @@
 // بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ صلى الله عليه وسلم InshaAllah
+
 import {
   CanActivate,
   ExecutionContext,
@@ -10,7 +11,7 @@ import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../../users/users.service';
 
 @Injectable()
-export class JwtAuthGuard implements CanActivate {
+export class JwtBearerAuthGuard implements CanActivate {
   constructor(
     private readonly jwt: JwtService,
     private readonly users: UsersService,

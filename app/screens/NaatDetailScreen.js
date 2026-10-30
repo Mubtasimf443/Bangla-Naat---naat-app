@@ -4,9 +4,9 @@ import { Linking, Pressable, ScrollView, Share, StyleSheet, Text, View } from 'r
 import Button from '../components/Button';
 import EmptyState from '../components/EmptyState';
 import { findNaat } from '../features/naats';
-import { categoryLabel } from '../lib/constants';
-import { s } from '../lib/strings';
-import { colors, radius, space, type } from '../lib/theme';
+import { categoryLabel } from '../lib/common/constants';
+import { s } from '../lib/common/strings';
+import { colors, radius, space, type } from '../lib/common/theme';
 
 const Action = ({ icon, label, active, onPress }) => (
   <Pressable onPress={onPress} style={[styles.action, active && { backgroundColor: colors.emeraldSoft }]}>

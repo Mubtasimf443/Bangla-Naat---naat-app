@@ -7,10 +7,10 @@ import {
     Text,
     View,
 } from 'react-native';
-import { colors } from '../lib/theme'; // adjust path to your theme file
+import { colors } from '../lib/common/theme'; // adjust path to your theme file
 import { useEffect } from 'react';
-import { TOKEN_KEYS, tokenService } from '../lib/tokenService';
-import { useTokenStore } from '../lib/token.store';
+import {  tokenService } from '../services/token.service';
+import { useTokenStore } from '../lib/common/token.store';
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function RegistrationSuccessScreen({ route, navigation }) {

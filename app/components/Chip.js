@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet, Text } from 'react-native';
-import { colors, radius, space } from '../lib/theme';
+import { colors, radius, space } from '../lib/common/theme';
 
 export default function Chip({ label, active, onPress }) {
   return (

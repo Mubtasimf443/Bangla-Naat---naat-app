@@ -1,5 +1,5 @@
 import { StyleSheet, Text, TextInput, View } from 'react-native';
-import { colors, radius, space, type } from '../lib/theme';
+import { colors, radius, space, type } from '../lib/common/theme';
 
 export default function Field({ label, error, multiline, ...props }) {
   return (

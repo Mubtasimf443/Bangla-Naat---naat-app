@@ -16,12 +16,13 @@ import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
 import { PaginationDto } from '../common/dto/pagination.dto';
 import { Role } from '../common/enums/role.enum';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import {  JwtBearerAuthGuard} from '../common/guards/jwt-bearer-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id.pipe';
 import { UserDocument } from '../users/schemas/user.schema';
 import { CreateNaatDto, InitialNaatsQueryDto, QueryNaatsDto, UpdateNaatDto } from './dto/naat.dto';
 import { NaatsService } from './naats.service';
+import { JwtCookieAuthGuard } from '../common/guards/jwt-cookie-auth.guard';
 
 /** Read endpoints used by the mobile app: /api/naats/... */
 @ApiTags('Naats')
@@ -44,7 +45,7 @@ export class NaatsController {
 
   @Get('fevorites')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtBearerAuthGuard)
   @ApiOperation({ summary: "Logged-in user's favorite (liked) naats" })
   favorites(@CurrentUser() user: UserDocument, @Query() query: PaginationDto) {
     return this.naats.findFavorites(user.id, query);
@@ -65,7 +66,7 @@ export class NaatController {
 
   @Post()
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtCookieAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MODERATOR)
   @ApiOperation({ summary: 'Create a naat (admin/moderator) - notifies all connected clients' })
   create(@Body() dto: CreateNaatDto) {
@@ -74,7 +75,7 @@ export class NaatController {
 
   @Patch(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtCookieAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MODERATOR)
   @ApiOperation({ summary: 'Update a naat (admin/moderator) - notifies all connected clients' })
   update(@Param('id', ParseObjectIdPipe) id: string, @Body() dto: UpdateNaatDto) {
@@ -83,7 +84,7 @@ export class NaatController {
 
   @Delete(':id')
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseGuards(JwtCookieAuthGuard, RolesGuard)
   @Roles(Role.ADMIN, Role.MODERATOR)
   @ApiOperation({ summary: 'Delete a naat (admin/moderator)' })
   remove(@Param('id', ParseObjectIdPipe) id: string) {
@@ -93,7 +94,7 @@ export class NaatController {
   @Patch(':id/like')
   @HttpCode(200)
   @ApiBearerAuth()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtBearerAuthGuard)
   @ApiOperation({ summary: 'Like / unlike a naat (toggle). Liked naats become favorites' })
   like(@Param('id', ParseObjectIdPipe) id: string, @CurrentUser() user: UserDocument) {
     return this.naats.toggleLike(id, user.id);

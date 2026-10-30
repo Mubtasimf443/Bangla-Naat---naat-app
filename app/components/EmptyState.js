@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View } from 'react-native';
-import { colors, space, type } from '../lib/theme';
+import { colors, space, type } from '../lib/common/theme';
 
 export default function EmptyState({ text }) {
   return (

@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Linking, Pressable, StyleSheet, Text, View } from 'react-native';
-import { CONTACTS } from '../lib/constants';
-import { s } from '../lib/strings';
-import { colors, radius, space, type } from '../lib/theme';
+import { CONTACTS } from '../lib/common/constants';
+import { s } from '../lib/common/strings';
+import { colors, radius, space, type } from '../lib/common/theme';
 
 export default function ContactScreen() {
   return (

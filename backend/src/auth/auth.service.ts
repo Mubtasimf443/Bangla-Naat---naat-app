@@ -14,6 +14,8 @@ import { createHash, randomBytes } from 'crypto';
 import { MailService } from '../mail/mail.service';
 import { UsersService } from '../users/users.service';
 import { ForgotPasswordDto, LoginDto, RegisterDto } from './dto/auth.dto';
+import { Response } from 'express';
+import { log } from 'console';
 
 const VERIFICATION_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 const RESET_TTL_MS = 60 * 60 * 1000; // 1 hour
@@ -85,6 +87,26 @@ export class AuthService {
     };
   }
 
+  async admin_login(res: Response,dto: LoginDto) {
+    log(dto)
+    let user = await this.users.findByEmail(dto.email);
+    console.log({user});
+    
+    if (!user) throw new NotFoundException('No User account exist from this email');
+    let isPasswordMatching =await bcrypt.compare(dto.password, user.password);
+    if (!isPasswordMatching || user.role === 'user' || !user.isVerified) throw new ForbiddenException('Invalid Password');
+    const accessToken = await this.jwt.signAsync({ sub: user._id, role: user.role });
+    return res
+      .status(200)
+      .cookie('auth_token', accessToken, {
+        httpOnly : true,
+        sameSite : this.config.getOrThrow('NODE_ENV') === 'production' ? 'lax' : 'none',
+        secure : this.config.getOrThrow('NODE_ENV') === 'production'
+      })
+      .json({name: user.name, id: user._id, email: user.email, role: user.role})
+    
+  }
+
   async forgotPassword(dto: ForgotPasswordDto) {
     const user = await this.users.findByEmail(dto.email);
     // Same response whether or not the account exists (prevents email enumeration).
@@ -113,6 +135,10 @@ export class AuthService {
     }
 
     return { success : true, data : null };
+  }
+
+  async userDetails(){
+
   }
 
   async applyPasswordReset(token: string): Promise<boolean> {

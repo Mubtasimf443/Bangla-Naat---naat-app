@@ -1,8 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { memo } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { categoryLabel } from '../lib/constants';
-import { colors, radius, space, type } from '../lib/theme';
+import { categoryLabel } from '../lib/common/constants';
+import { colors, radius, space, type } from '../lib/common/theme';
 
 function NaatCard({ naat, onPress }) {
   return (

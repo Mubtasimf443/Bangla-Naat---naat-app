@@ -115,6 +115,7 @@ export class UsersService {
     if (!user || !user.pendingPasswordHash) return false;
 
     user.password = user.pendingPasswordHash;
+    
     user.pendingPasswordHash = undefined;
     user.passwordResetTokenHash = undefined;
     user.passwordResetExpires = undefined;

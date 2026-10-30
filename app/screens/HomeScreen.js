@@ -1,9 +1,11 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { CATEGORIES } from '../lib/constants';
-import { s } from '../lib/strings';
-import { colors, radius, space, type } from '../lib/theme';
+import { CATEGORIES } from '../lib/common/constants';
+import { s } from '../lib/common/strings';
+import { colors, radius, space, type } from '../lib/common/theme';
+import { useTokenStore } from '../lib/common/token.store';
+import { tokenService } from '../services/token.service';
 
 const IconButton = ({ name, onPress }) => (
   <Pressable onPress={onPress} hitSlop={8} style={styles.iconBtn}>
@@ -12,11 +14,19 @@ const IconButton = ({ name, onPress }) => (
 );
 
 export default function HomeScreen({ navigation }) {
+  const Loggout = useTokenStore(state => state.Loggout);
+
+  async function logout() {
+    tokenService.deleteBearerToken();
+    Loggout();
+  }
   return (
     <SafeAreaView style={{ flex: 1 }} edges={['top']}>
       <ScrollView contentContainerStyle={{ padding: space.lg }}>
-        
-
+        <View style={{display :'flex', flexDirection : 'row', justifyContent : 'flex-end' , marginBottom : 3}}>
+          
+          <IconButton onPress={logout} name={'log-out-outline'} />
+        </View>
         <Pressable onPress={() => navigation.navigate('Search')} style={styles.search}>
           <Ionicons name="search" size={20} color={colors.muted} />
           <Text style={[type.body, { color: colors.muted }]}>{s.searchPlaceholder}</Text>
@@ -49,12 +59,12 @@ const styles = StyleSheet.create({
   grid: { flexDirection: 'row', flexWrap: 'wrap', gap: space.md },
   tile: {
     width: '48%',
-    minHeight: 84, 
-    backgroundColor: colors.surface, 
+    minHeight: 84,
+    backgroundColor: colors.surface,
     borderRadius: radius.md,
     borderLeftWidth: 4,
-    borderLeftColor: colors.brass, 
-    padding: space.lg, 
+    borderLeftColor: colors.brass,
+    padding: space.lg,
     justifyContent: 'center',
   },
 });

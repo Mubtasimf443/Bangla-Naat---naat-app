@@ -1,7 +1,7 @@
 // بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ صلى الله عليه وسلم InshaAllah
-import { Body, Controller, Get, HttpCode, Param, Post, Res } from '@nestjs/common';
+import { Body, Controller, Get, HttpCode, Param, Post, Req, Res, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiProduces, ApiTags } from '@nestjs/swagger';
-import { type Response } from 'express';
+import { type Request, type Response } from 'express';
 import { htmlPage } from '../common/utils/text.util';
 import { AuthService } from './auth.service';
 import { ForgotPasswordDto, LoginDto, RegisterDto } from './dto/auth.dto';
@@ -33,7 +33,18 @@ export class AuthController {
     return this.auth.login(dto);
   }
 
-  
+  @Post('admin_login')
+  @HttpCode(200)
+  @ApiOperation({ summary: 'Login and receive a JWT access token' })
+  admin_login
+    (
+      @Body() dto: LoginDto,
+      @Res() res : Response
+    ) {
+    return this.auth.admin_login( res, dto);
+  }
+
+
   @Post('forgot-password')
   @HttpCode(200)
   @ApiOperation({
@@ -56,6 +67,11 @@ export class AuthController {
           ? htmlPage('Password updated', 'Your new password is set. You can go back to the app and log in.', true)
           : htmlPage('Link invalid or expired', 'This link is invalid, expired or already used. Please request a new password change from the app.', false),
       );
+  }
+
+  @Get('/details')
+  async userDetails(@Req() req : Request) {
+
   }
 }
 

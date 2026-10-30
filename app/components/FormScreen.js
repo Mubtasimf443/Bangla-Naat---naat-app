@@ -1,5 +1,5 @@
 import { KeyboardAvoidingView, Platform, ScrollView, Text } from 'react-native';
-import { space } from '../lib/theme';
+import { space } from '../lib/common/theme';
 
 // Keyboard-safe scrolling wrapper for any form screen.
 export default function FormScreen({ children , error }) {

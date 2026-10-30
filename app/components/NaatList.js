@@ -1,6 +1,6 @@
 import { FlatList } from 'react-native';
-import { s } from '../lib/strings';
-import { space } from '../lib/theme';
+import { s } from '../lib/common/strings';
+import { space } from '../lib/common/theme';
 import EmptyState from './EmptyState';
 import NaatCard from './NaatCard';
 

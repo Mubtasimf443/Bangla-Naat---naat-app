@@ -1,0 +1,35 @@
+/* بِسْمِ اللهِ الرَّحْمٰنِ الرَّحِيْمِ ﷺ InshaAllah */
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Hind Siliguri", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Noto Serif Bengali", "Hind Siliguri", serif;
+
+  --color-moss-950: #0c2e25;
+  --color-moss-900: #11402f;
+  --color-moss-800: #1a5a43;
+  --color-moss-700: #237357;
+  --color-moss-100: #dcebe3;
+  --color-moss-50: #eef5f1;
+
+  --color-gold-600: #a8761a;
+  --color-gold-500: #c58f24;
+  --color-gold-100: #f6ead0;
+
+  --color-paper: #f4f6f3;
+  --color-ink: #17231e;
+  --color-ink-soft: #5b6b63;
+  --color-line: #dde4df;
+}
+
+body {
+  background: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-gold-500);
+  outline-offset: 2px;
+}

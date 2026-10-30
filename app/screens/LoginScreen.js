@@ -5,9 +5,10 @@ import { z } from 'zod';
 import Button from '../components/Button';
 import Field from '../components/Field';
 import FormScreen from '../components/FormScreen';
-import { s } from '../lib/strings';
-import { colors, space, type } from '../lib/theme';
-import { useTokenStore } from '../lib/token.store';
+import { s } from '../lib/common/strings';
+import { colors, space, type } from '../lib/common/theme';
+import { useTokenStore } from '../lib/common/token.store';
+import { tokenService } from '../services/token.service';
 
 const loginSchema = z.object({
   email: z
@@ -56,6 +57,8 @@ export default function LoginScreen({ navigation }) {
       const data = await response.json().catch(() => ({}));
 
       if (response.status === 200 || response.status === 201) {
+        console.log({token : data.accessToken});
+        tokenService.setBearerToken(data.accessToken);
         Login(data.accessToken);
       } else if (response.status === 401) {
         setError('ইমেইল অথবা পাসওয়ার্ড ভুল হয়েছে');

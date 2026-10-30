@@ -4,8 +4,8 @@ import Chip from '../components/Chip';
 import EmptyState from '../components/EmptyState';
 import NaatList from '../components/NaatList';
 import { searchNaats } from '../features/naats';
-import { s } from '../lib/strings';
-import { colors, radius, space } from '../lib/theme';
+import { s } from '../lib/common/strings';
+import { colors, radius, space } from '../lib/common/theme';
 
 export default function SearchScreen({ navigation }) {
   const [text, setText] = useState('');

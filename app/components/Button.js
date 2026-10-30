@@ -1,5 +1,5 @@
 import { ActivityIndicator, Pressable, StyleSheet, Text } from 'react-native';
-import { colors, radius, space } from '../lib/theme';
+import { colors, radius, space } from '../lib/common/theme';
 
 export default function Button({ title, onPress, variant = 'primary', disabled, small, loading }) {
   const bg = variant === 'primary' ? colors.emerald : variant === 'danger' ? colors.danger : 'transparent';

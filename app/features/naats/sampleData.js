@@ -1,4 +1,4 @@
-import { CATEGORIES } from '../../lib/constants';
+import { CATEGORIES } from '../../lib/common/constants';
 
 const content =
   'এখানে নাতের প্রথম লাইন থাকবে\nএখানে নাতের দ্বিতীয় লাইন থাকবে\n\nএখানে পরের স্তবকের লাইন থাকবে\nএখানে শেষ লাইন থাকবে';

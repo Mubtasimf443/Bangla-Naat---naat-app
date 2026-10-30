@@ -6,9 +6,9 @@ import {
   StyleSheet,
   StatusBar,
   ActivityIndicator,
-  SafeAreaView,
   useWindowDimensions,
 } from 'react-native';
+
 
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import Svg, {
@@ -19,6 +19,7 @@ import Svg, {
   G,
   Line,
 } from 'react-native-svg';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const COLORS = {
   background: '#FAF8EF',

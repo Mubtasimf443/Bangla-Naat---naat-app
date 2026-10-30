@@ -4,8 +4,8 @@ import { z } from 'zod';
 import Button from '../components/Button';
 import Field from '../components/Field';
 import FormScreen from '../components/FormScreen';
-import { s } from '../lib/strings';
-import { colors, space, type } from '../lib/theme';
+import { s } from '../lib/common/strings';
+import { colors, space, type } from '../lib/common/theme';
 
 const forgotSchema = z.object({
   email: z

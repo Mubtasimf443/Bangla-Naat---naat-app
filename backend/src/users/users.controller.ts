@@ -13,7 +13,7 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../common/decorators/current-user.decorator';
 import { Roles } from '../common/decorators/roles.decorator';
 import { Role } from '../common/enums/role.enum';
-import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
+import {  JwtBearerAuthGuard } from '../common/guards/jwt-bearer-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { ParseObjectIdPipe } from '../common/pipes/parse-object-id.pipe';
 import { QueryUsersDto } from './dto/query-users.dto';
@@ -22,7 +22,7 @@ import { UsersService } from './users.service';
 
 @ApiTags('Users (Admin)')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtBearerAuthGuard, RolesGuard)
 @Roles(Role.ADMIN)
 @Controller('users')
 export class UsersController {

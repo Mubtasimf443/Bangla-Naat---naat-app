@@ -9,8 +9,8 @@ import { StatusBar } from 'expo-status-bar';
 import { Pressable, Text } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import * as SecureStore from 'expo-secure-store'
-import { s } from './lib/strings';
-import { colors } from './lib/theme';
+import { s } from './lib/common/strings';
+import { colors } from './lib/common/theme';
 
 import ContactScreen from './screens/ContactScreen';
 import FavoritesScreen from './screens/FavoritesScreen';
@@ -24,12 +24,12 @@ import RegisterScreen from './screens/RegisterScreen';
 import SearchScreen from './screens/SearchScreen';
 
 import RegistrationSuccessScreen from './screens/RegistrationSuccessScreen';
-import { tokenService } from './lib/tokenService';
-import { useTokenStore } from './lib/token.store';
+import { tokenService } from './services/token.service';
+import { useTokenStore } from './lib/common/token.store';
 import { useEffect, useState } from 'react';
 import NaatLoadingScreen from './components/NaatLoadingScreen';
-import InitializingScreen from './components/InitializingScreen';
-import { insertAllNaats } from './services/database.service';
+import { useExpoSecureStorage } from './lib/hooks/useExpoSecureStorage';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -99,17 +99,16 @@ export default function App() {
   const Loggout = useTokenStore(state => state.Loggout);
   const Login = useTokenStore(state => state.Login);
   const isInitialized = SecureStore.getItem('INITIALIZATION');
-
-  async function initializeNaat(params) {
+  const [naats, setNaats] = useExpoSecureStorage('NAATS', []);
+  async function initializeNaat() {
     try {
       setIsInitializing(true);
-
+      
       let response = await fetch(process.env.EXPO_PUBLIC_API_URL + '/api/naats/initial');
       if (response.status > 201) {
         throw new Error("Failed in initial naats");
       }
-      let naats = await response.json();
-      await insertAllNaats(naats);
+      setNaats(await response.json());
       SecureStore.setItem('INITIALIZATION', 'yes')
     } catch (error) {
       console.error(error);
@@ -118,7 +117,7 @@ export default function App() {
       setIsInitializing(false);
     }
   }
-  
+
   useEffect(() => {
     if (isInitialized !== 'yes') initializeNaat();
     setTimeout(() => {
@@ -129,9 +128,8 @@ export default function App() {
     }, 3000);
   }, []);
 
-  if (isInitializing) return <InitializingScreen />
-  if (loading) return <NaatLoadingScreen />;
-  
+
+  if (!!loading || !!isInitializing) return <NaatLoadingScreen />;
 
   return (
     <SafeAreaProvider>
